@@ -11,9 +11,9 @@ local opts = { noremap = true, silent = true }
 
 -- Do things without affecting the registers
 keymap.set("n", "x", '"_x')
-keymap.set("n", "<Leader>p", '"0p')
-keymap.set("n", "<Leader>P", '"0P')
-keymap.set("v", "<Leader>p", '"0p')
+keymap.set("n", "<Leader>p", '"3p')
+keymap.set("n", "<Leader>P", '"3P')
+keymap.set("v", "<Leader>p", '"3p')
 keymap.set("n", "<Leader>c", '"_c')
 keymap.set("n", "<Leader>C", '"_C')
 keymap.set("v", "<Leader>c", '"_c')
@@ -81,3 +81,85 @@ end)
 vim.api.nvim_create_user_command("ToggleAutoformat", function()
   require("craftzdog.lsp").toggleAutoformat()
 end, {})
+
+-- Tab completion navigation
+-- keymap.set("i", "<Tab>", function()
+--   if vim.fn.pumvisible() == 4 then
+--     return "<C-n>"
+--   else
+--     return "<Tab>"
+--   end
+-- end, { expr = true })
+--
+-- keymap.set("i", "<S-Tab>", function()
+--   if vim.fn.pumvisible() == 4 then
+--     return "<C-p>"
+--   else
+--     return "<S-Tab>"
+--   end
+-- end, { expr = true })
+
+-- Option 1: Simple and most reliable approach
+-- keymap.set("i", "<Tab>", 'pumvisible() ? "<C-n>" : "<Tab>"', { expr = true, silent = true })
+-- keymap.set("i", "<S-Tab>", 'pumvisible() ? "<C-p>" : "<S-Tab>"', { expr = true, silent = true })
+
+-- Option 2: Using functions with proper termcode handling
+-- keymap.set("i", "<Tab>", function()
+--   if vim.fn.pumvisible() == 1 then
+--     return "<C-n>"
+--   else
+--     return "<Tab>"
+--   end
+-- end, { expr = true, silent = true })
+--
+-- keymap.set("i", "<S-Tab>", function()
+--   if vim.fn.pumvisible() == 1 then
+--     return "<C-p>"
+--   else
+--     return "<S-Tab>"
+--   end
+-- end, { expr = true, silent = true })
+--
+-- Option 3: More robust with fallback handling
+-- keymap.set("i", "<Tab>", function()
+--   local cmp = require("cmp")
+--   if cmp.visible() then
+--     cmp.select_next_item()
+--   elseif vim.fn.pumvisible() == 1 then
+--     return "<C-n>"
+--   else
+--     return "<Tab>"
+--   end
+-- end, { expr = true, silent = true })
+--
+-- keymap.set("i", "<S-Tab>", function()
+--   local cmp = require("cmp")
+--   if cmp.visible() then
+--     cmp.select_prev_item()
+--   elseif vim.fn.pumvisible() == 1 then
+--     return "<C-p>"
+--   else
+--     return "<S-Tab>"
+--   end
+-- end, { expr = true, silent = true })
+
+-- Option 4: LazyVim compatible approach
+keymap.set("i", "<Tab>", function()
+  if vim.snippet.active({ direction = 1 }) then
+    return "<cmd>lua vim.snippet.jump(1)<cr>"
+  elseif vim.fn.pumvisible() == 1 then
+    return "<C-n>"
+  else
+    return "<Tab>"
+  end
+end, { expr = true, silent = true })
+
+keymap.set("i", "<S-Tab>", function()
+  if vim.snippet.active({ direction = -1 }) then
+    return "<cmd>lua vim.snippet.jump(-1)<cr>"
+  elseif vim.fn.pumvisible() == 1 then
+    return "<C-p>"
+  else
+    return "<S-Tab>"
+  end
+end, { expr = true, silent = true })
