@@ -19,6 +19,6 @@
 
 📋 **Requirements:** Neovim 0.9+ • Git • Nerd Font • Node.js • ripgrep
 
-🚀 **Install:** `git clone https://github.com/yourusername/nvim-config.git ~/.config/nvim && nvim`
+🚀 **Install:** `git clone https://github.com/Nyxox-debug/nvim-config.git ~/.config/nvim && nvim`
 
 ⌨️ **[Complete Keymap Documentation](keymaps.md)** • **Quick keys:** `;f` find files • `;r` live grep • `sf` file browser • `jj` exit insert
